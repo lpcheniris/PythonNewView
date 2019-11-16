@@ -1,0 +1,10 @@
+class Product:
+    title = ""
+    price = 0
+    star = 0
+    views = 0
+    def __init__(self, title, price, star, views):
+        self.title = title
+        self.price = price
+        self.star = star
+        self.views = views

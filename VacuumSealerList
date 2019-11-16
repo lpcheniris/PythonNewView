@@ -1,0 +1,149 @@
+import os
+import xlrd as xd
+import xlwt as xt
+import numpy as np
+
+FOLDER = "./data/vacuum sealer/"
+INPUT_FOLDER = FOLDER+"input folder/"
+OUT_FOLDER = FOLDER+"output folder/"
+HEADER = ["Title", "Price", "Views", "Star"]
+
+class Product:
+    title = ""
+    price = 0
+    star = 0
+    views = 0
+    # def __init__(self, title, price, star, views):
+    #     self.title = title
+    #     self.price = price
+    #     self.star = star
+    #     self.views = views
+
+def getCountByTitleLongString(string):
+    counter = {}
+    nweString = string
+    nweString = nweString.replace(",", " ")
+    nweString = nweString.replace("&", " ")
+    nweString = nweString.replace("|", " ")
+    nweString = nweString.replace("-", " ")
+    nweString = nweString.title()
+    for word in nweString.split(" "):
+        if word not in counter:
+            counter[word] = 1
+        else:
+            counter[word] += 1
+    return sorted(counter.items(), key= lambda item: item[1], reverse = True)
+
+def getFilesName(path):
+    files = os.listdir(path)
+    return files
+
+def isnumber(aString):
+   try:
+      float(aString)
+      return True
+   except:
+      return False
+
+def filterHighQualityProduct(product):
+    if product.title == "":
+        return False
+    elif product.price == "" or isnumber(product.price) == False:
+        return False
+    elif product.views == "" or isnumber(product.views) == False:
+        return False
+    elif product.star == "" or isnumber(product.star) == False:
+        return False
+    else:
+        return True
+
+def getProductList(folder):
+    list  = []
+    filesList = getFilesName(folder)
+    for i in filesList:
+        productExcel = xd.open_workbook(folder+i)
+        productSheet = productExcel.sheet_by_index(0)
+        rowSize = productSheet.nrows
+        titleRow = productSheet.row_values(0)
+        productTitleColIndex = titleRow.index("a-size-medium")
+        productPriceColIndex = titleRow.index("a-offscreen")
+        productViewsColIndex = titleRow.index("a-size-base")
+        productStarColIndex = titleRow.index("a-icon-alt")
+        for i in range(1, rowSize):
+            productItem = Product()
+            productItem.title = productSheet.row_values(i)[productTitleColIndex]
+            productItem.price = productSheet.row_values(i)[productPriceColIndex].strip("$")
+            productItem.views = productSheet.row_values(i)[productViewsColIndex]
+            productItem.star = productSheet.row_values(i)[productStarColIndex].split(" ")[0]
+            if (filterHighQualityProduct(productItem)):
+                list.append(productItem)
+    return list
+
+def getMeanAndMedian(productList):
+    prices = []
+    for i in productList:
+        prices.append(float(i.price))
+    print(prices)
+    return {
+        "mean": round(np.mean(prices), 2),
+        "median": round(np.median(prices)),
+        "mode": round(np.argmax(np.bincount(prices)))
+    }
+
+def getLongTitle(productList):
+    longTitleString = ""
+    for i in range(0, productList.__len__()):
+        longTitleString = longTitleString + productList[i].title
+    return longTitleString
+
+def exportProductListToExcel(productList, outputFoder):
+
+    book = xt.Workbook(encoding='utf-8', style_compression=0)
+    sheet = book.add_sheet('Product List', cell_overwrite_ok=True)
+
+    colHeaderIndex = 0
+    for h in HEADER:
+        sheet.write(0, colHeaderIndex, h)
+        colHeaderIndex = colHeaderIndex + 1
+
+    row = 1
+    for product in productList:
+        sheet.write(row, 0, product.title)
+        sheet.write(row, 1, product.price)
+        sheet.write(row, 2, product.views)
+        sheet.write(row, 3, product.star)
+        row = row + 1
+    statistics = getMeanAndMedian(productList)
+    sheet.write(row+5, 0, "Mean:"+str(statistics['mean']))
+    sheet.write(row+5, 1, "Median:"+str(statistics["median"]))
+    sheet.write(row+5, 2, "Mode:"+str(statistics["mode"]))
+    book.save(outputFoder+'Product List.xls')
+
+
+def exportHighFrequencyWordToExcel(words, OutputFolder):
+    book = xt.Workbook(encoding='utf-8', style_compression=0)
+    sheet = book.add_sheet('High Frequency Word', cell_overwrite_ok=True)
+    colHeaderIndex = 0
+    highFrequencyWordHeader = ["Word", "Count"]
+    for h in highFrequencyWordHeader:
+        sheet.write(0, colHeaderIndex, h)
+        colHeaderIndex = colHeaderIndex + 1
+
+    row = 1
+    for word in words:
+        sheet.write(row, 0, word[0])
+        sheet.write(row, 1, word[1])
+        row = row + 1
+    book.save(OutputFolder + 'High Frequency Word.xls')
+
+
+def main():
+    productList = getProductList(INPUT_FOLDER)
+    highFrequencyWord = getCountByTitleLongString(getLongTitle(productList))
+    exportHighFrequencyWordToExcel(highFrequencyWord, OUT_FOLDER)
+    exportProductListToExcel(productList, OUT_FOLDER)
+
+
+main()
+
+

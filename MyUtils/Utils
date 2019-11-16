@@ -1,0 +1,4 @@
+from bs4 import BeautifulSoup
+
+def getHtml(file):
+    return BeautifulSoup(open(file, "r", encoding='utf-8'), 'html.parser')
