@@ -4,9 +4,9 @@ import xlwt as xt
 
 # productName = "Kichen Utensil"
 # productName = "Silicone Food Bag"
-# productName = "Pepper Mill"
+productName = "Pepper Mill"
 # productName = "French Press Coffee Maker"
-productName = "Coffee Grinder"
+# productName = "Coffee Grinder"
 # productName = "Coffee Filter"
 
 TITLES = ["Class Name", "Title", "Rating", "Star", "Price", "ASIN", "Weight", "ShippingWeight", "Package Dimensions",
@@ -14,9 +14,8 @@ TITLES = ["Class Name", "Title", "Rating", "Star", "Price", "ASIN", "Weight", "S
           "Reviews", "Html Name", "Link"]
 
 PRODUCTDETAIL_HTML_PATH = "./OriginalData/AmazonProductDetailHtml/" + productName
-DETAILRESULTDATA_PATH = "./ResultsData/ProductDetail/" + productName
-PRODUCTDETAILINFO_PATH = DETAILRESULTDATA_PATH + "/ProductDetail.xls"
-PRODUCTDETAIL_TITLE_NGRAMS = DETAILRESULTDATA_PATH + "/ProductTitleNgrams.xls"
+DETAIL_RESULT_DATA_PATH = "./ResultsData/" + productName
+PRODUCT_DETAIL_INFO_PATH = DETAIL_RESULT_DATA_PATH + "/ProductDetail.xls"
 
 class Product:
     className = ""
@@ -149,11 +148,11 @@ def saveProductDetail():
         productSheet.write(index + 1, 16, "----#####----".join(product.reviews))
         productSheet.write(index + 1, 17, product.fromHtml)
         productSheet.write(index + 1, 18, product.link)
-    book.save(PRODUCTDETAILINFO_PATH)
+    book.save(PRODUCT_DETAIL_INFO_PATH)
 
 
 def main():
-    # os.mkdir(DETAILRESULTDATA_PATH)
+    # os.mkdir(DETAIL_RESULT_DATA_PATH)
     # print(getProductDetailList())
     saveProductDetail()
 

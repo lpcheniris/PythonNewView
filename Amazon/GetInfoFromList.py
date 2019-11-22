@@ -5,21 +5,18 @@ import xlrd as xd
 from nltk.util import ngrams
 import re
 
-# productName = "Kichen Utensil"
+productName = "Kichen Utensil"
 # productName = "Silicone Food Bag"
-# productName = "Pepper Mill"
+productName = "Pepper Mill"
 # productName = "French Press Coffee Maker"
-productName = "Coffee Grinder"
+# productName = "Coffee Grinder"
 # productName = "Coffee Filter"
 
 PRODUCTLIST_HTML_PATH = "./OriginalData/AmazonProductListHtml/" + productName
-LISTRESULTDATA_PATH = "./ResultsData/ProductList/" + productName
-DetailRESULTDATA_PATH = "./ResultsData/ProductDetail/" + productName
-PRODUCTLISTINFO_PATH = LISTRESULTDATA_PATH + "/ProductListInfo.xls"
-PRODUCTLIST_TITLE_NGRAMS = LISTRESULTDATA_PATH + "/ProductTitleNgrams.xls"
+LIST_RESULT_DATA_PATH = "./ResultsData/" + productName
+PRODUCT_LIST_INFO_PATH = LIST_RESULT_DATA_PATH + "/ProductListInfo.xls"
 
 TITLES = ["Title", "Rating", "Reviews", "Price", "ASIN", "Sponsored", "Html Name", "Link"]
-
 
 class Product:
     title = ""
@@ -103,57 +100,11 @@ def saveProductTitle(productList):
         productSheet.write(index + 1, 5, productList[index].sponsored)
         productSheet.write(index + 1, 6, productList[index].htmlName)
         productSheet.write(index + 1, 7, productList[index].link)
-    book.save(PRODUCTLISTINFO_PATH)
-
-
-def getTitlesFromExcel(fileName=PRODUCTLISTINFO_PATH):
-    titlesExcel = xd.open_workbook(fileName)
-    titlesSheet = titlesExcel.sheet_by_index(0)
-    titleString = ""
-    for rowIndex in range(titlesSheet.nrows):
-        titleString = titleString + "  " + titlesSheet.row_values(rowIndex)[0]
-    pat_letter = re.compile(r'[^a-zA-Z \']+')
-    titleString = pat_letter.sub(' ', titleString).strip().lower()
-    return titleString.split()
-
-def writeDegree(degree, sheet):
-    degree_c = {}
-    for b in degree:
-        if b not in degree_c:
-            degree_c[b] = 1
-        else:
-            degree_c[b] += 1
-    rowIndex2 = 0
-    for key, val in sorted(degree_c.items(), key=lambda x: (x[1], x[0]), reverse=True):
-        sheet.write(rowIndex2, 0, " ".join(key))
-        sheet.write(rowIndex2, 1, val)
-        rowIndex2 = rowIndex2 + 1
-
-def wordNgrams(titleList=[], fileName=PRODUCTLIST_TITLE_NGRAMS):
-    degree1 = ngrams(titleList, 1)
-    degree2 = ngrams(titleList, 2)
-    degree3 = ngrams(titleList, 3)
-    titlesExcel = xt.Workbook(encoding='utf-8', style_compression=0)
-    degree1Sheet = titlesExcel.add_sheet("Degree 1", cell_overwrite_ok=True)
-    degree2Sheet = titlesExcel.add_sheet("Degree 2", cell_overwrite_ok=True)
-    degree3Sheet = titlesExcel.add_sheet("Degree 3", cell_overwrite_ok=True)
-
-    writeDegree(degree1, degree1Sheet)
-    writeDegree(degree2, degree2Sheet)
-    writeDegree(degree3, degree3Sheet)
-
-    titlesExcel.save(fileName)
+    book.save(PRODUCT_LIST_INFO_PATH)
 
 
 def main():
     product = getProductListFromFiles()
     saveProductTitle(product)
 
-
-def main2():
-    titleList = getTitlesFromExcel()
-    wordNgrams(titleList)
-
-
-# main()
-main2()
+main()
