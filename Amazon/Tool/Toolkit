@@ -1,22 +1,17 @@
 from bs4 import BeautifulSoup
-import json
+
+# import json
 NOT_CAPITALIZE = ["or", "and", "with"]
 
 
-def getHtml(file = "./ForToolKit.html"):
+def getHtml(file="./ForToolKit.html"):
     soup = BeautifulSoup(open(file, "r", encoding='utf-8'), 'html.parser')
-    str = soup.select("p")[0].text.replace("\n", " ")
-    return CapitalizeTitle(str)
-    # strList = str.split(" ")
-    # strMap = {}
-    # for item in strList:
-    #     item = item.strip()
-    #     strMap[item] = item
-    # return CapitalizeTitle(str.join(strMap.keys()))
+    words = soup.select("p")[0].text.replace("\n", " ")
+    return words.replace("  ", "").split(" ")
 
-def CapitalizeTitle(title):
+
+def CapitalizeTitle(wordsList):
     titleString = ""
-    wordsList = title.replace("  ", "").split(" ")
     for item in wordsList:
         conversion = item
         if item not in NOT_CAPITALIZE:
@@ -24,12 +19,18 @@ def CapitalizeTitle(title):
             conversion = item.capitalize()
         titleString = titleString + conversion + " "
     titleString = titleString.replace("|", "\n")
-    return titleString + "\n" + str(len(titleString))+"\n" + titleString[0:36]
+    return {
+        "words": titleString,
+        "wordsLength": str(len(titleString)),
+        "words36": titleString[0:36]
+    }
+
 
 def main():
-  test = "MONEY BACK GUARANTEE"
-  # print(CapitalizeTitle(test))
-  print(getHtml())
+    wordsList = getHtml()
+    # wordsList = list(set(wordsList))
+    wordInfo = CapitalizeTitle(wordsList)
+    # print(wordInfo["words"].replace(" ", "\n"))
+    print(wordInfo["words"] + "\n" + wordInfo["wordsLength"] + "\n" + wordInfo["words36"])
 
 main()
-

@@ -1,11 +1,11 @@
 import os
 
-# productName = "Kichen Utensil"
+productName = "Kichen Utensil"
 # productName = "Silicone Food Bag"
 # productName = "Pepper Mill"
 # productName = "French Press Coffee Maker"
 # productName = "Coffee Grinder"
-productName = "Coffee Filter"
+# productName = "Coffee Filter"
 
 DETAILORIGINALDATA_PATH = "./OriginalData/AmazonProductDetailHtml/" + productName
 LISTORIGINALDATA_PATH = "./OriginalData/AmazonProductListHtml/" + productName

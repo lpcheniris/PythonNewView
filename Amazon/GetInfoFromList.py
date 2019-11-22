@@ -129,7 +129,7 @@ def writeDegree(degree, sheet):
         sheet.write(rowIndex2, 1, val)
         rowIndex2 = rowIndex2 + 1
 
-def twoWordNgrams(titleList=[], fileName=PRODUCTLIST_TITLE_NGRAMS):
+def wordNgrams(titleList=[], fileName=PRODUCTLIST_TITLE_NGRAMS):
     degree1 = ngrams(titleList, 1)
     degree2 = ngrams(titleList, 2)
     degree3 = ngrams(titleList, 3)
@@ -152,7 +152,7 @@ def main():
 
 def main2():
     titleList = getTitlesFromExcel()
-    twoWordNgrams(titleList)
+    wordNgrams(titleList)
 
 
 # main()
