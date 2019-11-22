@@ -62,7 +62,6 @@ def clearText(list):
 
 
 def getProductDetailFromHtml(htmlSoup, htmlName):
-    print(htmlName)
     product = Product()
     product.title = clearText(htmlSoup.select("span[id='productTitle']"))
     product.className = clearText(htmlSoup.select("ul[class='a-unordered-list a-horizontal a-size-small']"))

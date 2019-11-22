@@ -10,11 +10,10 @@ def saveKeyWords(wordsList):
         wordsSheet.write(index, 0, value["value"])
         wordsSheet.write(index, 2, value["resource"])
         wordsSheet.write(index, 3, value["prefix"])
-    wordsExcel.save("./Key Words.xls")
+    wordsExcel.save("Key Words.xls")
 
 def getWordsList():
-    wordsFile = open("./keyWords.json", "r", encoding='utf-8')
-
+    wordsFile = open("keyWords.json", "r", encoding='utf-8')
     wordsJsonList = json.load(wordsFile)["key_word"]
     keyMap = {}
     keyWords = []
@@ -25,9 +24,12 @@ def getWordsList():
             # value = item["value"]
             if prefix != "" and item["value"] != "":
                 valueWithPrefix = item["value"].strip()
+                print(prefix)
+                print(valueWithPrefix)
                 valueSplitList = valueWithPrefix.split(prefix)
+                print(valueSplitList)
 
-                if (len(valueSplitList) > 0):
+                if (len(valueSplitList) > 1):
                     value = valueSplitList[1].strip()
                     if value not in keyMap.keys():
                         keyMap[value] = value
@@ -41,7 +43,7 @@ def getWordsList():
 
 def main():
     wordsList = getWordsList()
-    print(wordsList)
+    # print(wordsList)
     saveKeyWords(wordsList)
 
 
