@@ -5,12 +5,12 @@ import xlrd as xd
 from nltk.util import ngrams
 import re
 
-productName = "Kichen Utensil"
+# productName = "Kichen Utensil"
 # productName = "Silicone Food Bag"
-productName = "Pepper Mill"
+# productName = "Pepper Mill"
 # productName = "French Press Coffee Maker"
 # productName = "Coffee Grinder"
-# productName = "Coffee Filter"
+productName = "Coffee Filter"
 
 PRODUCTLIST_HTML_PATH = "./OriginalData/AmazonProductListHtml/" + productName
 LIST_RESULT_DATA_PATH = "./ResultsData/" + productName

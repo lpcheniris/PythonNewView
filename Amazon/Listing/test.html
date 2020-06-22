@@ -1,0 +1,39 @@
+<style>
+    #test_priority {
+      color:red;
+    }
+    .text-green {
+       color: green;
+    }
+    div {
+       color: blue;
+    }
+    div[data="yellow"] {
+       color: yellow;
+    }
+    div {
+       /* color: pink !important; */
+    }
+
+<script>
+
+
+
+
+    var object = function() {
+       var text = "This is object!"
+       var that = this
+       var getNameFunc = function() {
+         console.log(that)
+         console.log(that.text)
+       }
+       return getNameFunc
+    }
+    object()()
+</script>
+</style>
+<html>
+<body>
+<div id="test_priority" class="text-green" data="yellow" style="color: gray">Test Priority: Important > Style > ID > Property > Class > Label</div>
+</body>
+</html>

@@ -6,10 +6,10 @@ import re
 
 # productName = "Kichen Utensil"
 # productName = "Silicone Food Bag"
-productName = "Pepper Mill"
+# productName = "Pepper Mill"
 # productName = "French Press Coffee Maker"
 # productName = "Coffee Grinder"
-# productName = "Coffee Filter"
+productName = "Coffee Filter"
 
 PRODUCT_RESULT_DATA_PATH = "./ResultsData/" + productName
 PRODUCT_DETAIL_INFO_PATH = PRODUCT_RESULT_DATA_PATH + "/ProductListInfo.xls"
@@ -59,7 +59,7 @@ def wordNgrams(titleList=[], fileName=PRODUCT_LIST_TITLE_NGRAMS):
 def main():
     listTitles = getTitlesFromExcel(PRODUCT_LIST_INFO_PATH)
     wordNgrams(listTitles, PRODUCT_LIST_TITLE_NGRAMS)
-    listTitles = getTitlesFromExcel(PRODUCT_LIST_INFO_PATH)
-    wordNgrams(listTitles, PRODUCT_DETAIL_TITLE_NGRAMS)
+    detailTitles = getTitlesFromExcel(PRODUCT_DETAIL_INFO_PATH)
+    wordNgrams(detailTitles, PRODUCT_DETAIL_TITLE_NGRAMS)
 
 main()
