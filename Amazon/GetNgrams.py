@@ -9,20 +9,24 @@ import re
 # productName = "Pepper Mill"
 # productName = "French Press Coffee Maker"
 # productName = "Coffee Grinder"
-productName = "Coffee Filter"
+# productName = "Coffee Filter"
+# productName = "i11 pro max case"
+# productName = "i11 pro case"
+productName = "i11 pro max screen protector"
+
 
 PRODUCT_RESULT_DATA_PATH = "./ResultsData/" + productName
-PRODUCT_DETAIL_INFO_PATH = PRODUCT_RESULT_DATA_PATH + "/ProductListInfo.xls"
+PRODUCT_DETAIL_INFO_PATH = PRODUCT_RESULT_DATA_PATH + "/ProductDetail.xls"
 PRODUCT_LIST_INFO_PATH = PRODUCT_RESULT_DATA_PATH + "/ProductListInfo.xls"
 PRODUCT_LIST_TITLE_NGRAMS = PRODUCT_RESULT_DATA_PATH + "/ProductListTitleNgrams.xls"
 PRODUCT_DETAIL_TITLE_NGRAMS = PRODUCT_RESULT_DATA_PATH + "/ProductDetailTitleNgrams.xls"
 
-def getTitlesFromExcel(titleFile=PRODUCT_LIST_TITLE_NGRAMS):
+def getTitlesFromExcel(titleFile=PRODUCT_LIST_TITLE_NGRAMS, row = 0):
     titlesExcel = xd.open_workbook(titleFile)
     titlesSheet = titlesExcel.sheet_by_index(0)
     titleString = ""
     for rowIndex in range(titlesSheet.nrows):
-        titleString = titleString + "  " + titlesSheet.row_values(rowIndex)[0]
+        titleString = titleString + "  " + titlesSheet.row_values(rowIndex)[row]
     pat_letter = re.compile(r'[^a-zA-Z \']+')
     titleString = pat_letter.sub(' ', titleString).strip().lower()
     return titleString.split()
@@ -59,7 +63,7 @@ def wordNgrams(titleList=[], fileName=PRODUCT_LIST_TITLE_NGRAMS):
 def main():
     listTitles = getTitlesFromExcel(PRODUCT_LIST_INFO_PATH)
     wordNgrams(listTitles, PRODUCT_LIST_TITLE_NGRAMS)
-    detailTitles = getTitlesFromExcel(PRODUCT_DETAIL_INFO_PATH)
+    detailTitles = getTitlesFromExcel(PRODUCT_DETAIL_INFO_PATH, 1)
     wordNgrams(detailTitles, PRODUCT_DETAIL_TITLE_NGRAMS)
 
 main()

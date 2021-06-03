@@ -7,7 +7,15 @@ import xlwt as xt
 # productName = "Pepper Mill"
 # productName = "French Press Coffee Maker"
 # productName = "Coffee Grinder"
-productName = "Coffee Filter"
+# productName = "Coffee Filter"
+# productName = "i11 pro max case"
+# productName = "i11 pro case"
+# productName = "i11 pro max screen protector"
+# productName = "Smart Lock"
+# productName = "Camera"
+productName = "Robot Vacuum"
+
+
 
 TITLES = ["Class Name", "Title", "Rating", "Star", "Price", "ASIN", "Weight", "ShippingWeight", "Package Dimensions",
           "First List Date", "First Class Rank", "Second Class Rank", "Brand", "Store", "Bullet Point", "Description",
@@ -63,6 +71,7 @@ def clearText(list):
 def getProductDetailFromHtml(htmlSoup, htmlName):
     product = Product()
     product.title = clearText(htmlSoup.select("span[id='productTitle']"))
+    # print(htmlSoup.select("span[id='productTitle']"))
     product.className = clearText(htmlSoup.select("ul[class='a-unordered-list a-horizontal a-size-small']"))
     product.price = clearText(htmlSoup.select("span[id='priceblock_ourprice']")) + clearText(
         htmlSoup.select("span[id='priceblock_saleprice']"))
@@ -86,11 +95,11 @@ def getProductDetailFromHtml(htmlSoup, htmlName):
             product.packageDimensions = value
         elif (key == "Item Weight"):
             product.weight = value.split("pounds")[0]
-        elif (key == "Shipping Weight"):
+        elif (key == "Product Dimensions"):
             product.shippingWeight = value.split("pounds")[0]
         elif (key == "ASIN"):
             product.ASIN = value
-        elif (key == "Date first listed on Amazon"):
+        elif (key == "Date First Available"):
             product.firstListDate = value
         elif (key == "Best Sellers Rank"):
             rankStr = value.split("#")

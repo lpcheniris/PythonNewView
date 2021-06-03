@@ -10,7 +10,14 @@ import re
 # productName = "Pepper Mill"
 # productName = "French Press Coffee Maker"
 # productName = "Coffee Grinder"
-productName = "Coffee Filter"
+# productName = "Coffee Filter"
+# productName = "i11 pro max case"
+# productName = "i11 pro case"
+# productName = "i11 pro max screen protector"
+# productName = "Smart Lock"
+# productName = "Camera"
+productName = "Robot Vacuum"
+
 
 PRODUCTLIST_HTML_PATH = "./OriginalData/AmazonProductListHtml/" + productName
 LIST_RESULT_DATA_PATH = "./ResultsData/" + productName
@@ -51,19 +58,19 @@ def getHtmFile(folder=PRODUCTLIST_HTML_PATH, format=".html"):
 
 
 def getProductFromHtml(htmlSoup, htmlName):
-    productHtmlWrapper = htmlSoup.select("div[class='s-result-list s-search-results sg-row']")
+    productHtmlWrapper = htmlSoup.select("div[class='s-main-slot s-result-list s-search-results sg-row']")
     productHtml = productHtmlWrapper[0]
     productHtmlList = productHtml.find_all("div", attrs={"data-asin": True})
     productList = []
     for productHtml in productHtmlList:
         product = Product()
-        product.title = clearText(
-            productHtml.select("h2[class='a-size-mini a-spacing-none a-color-base s-line-clamp-4']"))
+        product.title = clearText( 
+            productHtml.select("span[class*='a-color-base a-text-normal']"))
         product.rating = clearText(productHtml.select("span[class='a-icon-alt']")).split("out of 5 stars")[0]
         product.reviews = clearText(productHtml.select("span[class='a-size-base']"))
-        product.price = clearText(productHtml.select("div[class='a-row'] span[class='a-price']"))
+        product.price = clearText(productHtml.select("span[class='a-price-whole']"))
         product.sponsored = clearText(
-            productHtml.select("div[class='a-row a-spacing-micro'] span[class='a-size-base a-color-secondary']"))
+            productHtml.select("div[class='a-row a-spacing-micro'] span[class='a-color-secondary']"))
         product.asin = productHtml.get("data-asin")
         product.htmlName = htmlName
         product.link = "https://www.amazon.com/dp/" + product.asin
