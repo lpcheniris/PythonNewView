@@ -5,6 +5,8 @@ from nltk.util import ngrams
 import math
 import random
 
+ACCOUNT_NAME = "Garden"
+ROOT_PATH = os.path.dirname(os.path.realpath(__file__))
 def getfile(filePath):
     return open(filePath).read()
 
@@ -38,25 +40,15 @@ def prepareData(content):
 
 
 def putWordsToExcel(keyWordsArray, excelFile):
-
     keyWordsBook = xd.open_workbook(excelFile)
     keyWordsSheet = keyWordsBook.add_sheet("KeyWords_temporary", cell_overwrite_ok=True)
-    # titleString = ""
-    # for rowIndex in range(titlesSheet.nrows):
-    #     titleString = titleString + "  " + titlesSheet.row_values(rowIndex)[0]
-    # pat_letter = re.compile(r'[^a-zA-Z \']+')
-    # titleString = pat_letter.sub(' ', titleString).strip().lower()
-    # return titleString.split()
-
-    # keyWordsBook = xt.Workbook(encoding='utf-8', style_compression=0)
-    # keyWordsSheet = keyWordsBook.add_sheet("KeyWords", cell_overwrite_ok=True)
     rowIndex=0
     for item in keyWordsArray:
         keyWordsSheet.write(rowIndex, 0, item[0])
         keyWordsSheet.write(rowIndex, 1, item[1])
         rowIndex = rowIndex + 1
 
-    keyWordsBook.save("keyWords.xls")
+    keyWordsBook.save(ROOT_PATH + "/" + ACCOUNT_NAME+"_keyWords.xls")
 
 def generateHashTag(kws):
     step = math.ceil(len(kws)/3)
@@ -69,20 +61,25 @@ def generateHashTag(kws):
        hashTagString = hashTagString +" #" +item[0]
     print(hashTagString)
 
-def getDataFromExcel(filePath):
-    keyWordsBook = xd.open_workbook(filePath)
-    keywordsSheet = keyWordsBook.sheet_by_index(0)
+def getDataFromExcel(filePath, sheetIndex):
+    try:
+        keyWordsBook = xd.open_workbook(filePath)
+    except:
+        return
+
+    keywordsSheet = keyWordsBook.sheet_by_index(sheetIndex)
     kwArray = []
     for rowIndex in range(keywordsSheet.nrows):
         kwArray.append((keywordsSheet.row_values(rowIndex)[0], keywordsSheet.row_values(rowIndex)[1]))
     return kwArray
+    
 
 def main():
-    # fileContent = getfile("./china_traditional_architecture_keywords.text")
-    # keyWordsArray = prepareData(fileContent)
-    kwFromExcel = getDataFromExcel('/Users/lpchen/Workspace/mine/PythonNewView/INS/keyWords.xls')
-    generateHashTag(kwFromExcel)
-    # putWordsToExcel(keyWordsArray, "./keyWords.xls")
+    fileContent = getfile(ROOT_PATH+"/"+ACCOUNT_NAME+".text")
+    keyWordsArray = prepareData(fileContent)
+    kwArray = getDataFromExcel(ROOT_PATH+"/"+ACCOUNT_NAME+'_keyWords.xls', 0)
+    generateHashTag(kwArray)
+    putWordsToExcel(keyWordsArray, ROOT_PATH+"/"+ACCOUNT_NAME+'_keyWords.xls')
 
 
 main()
